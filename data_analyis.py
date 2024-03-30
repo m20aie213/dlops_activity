@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+from sklearn.preprocessing import LabelEncoder
 
 def load_data(file_path):
     """Load data from a CSV file."""
@@ -12,6 +13,11 @@ def load_data(file_path):
     except Exception as e:
         print(f"An error occurred: {e}")
         return None
+
+def encode_label(data):
+    le = LabelEncoder()
+    data['Label'] = le.fit_transform(data.Class)
+    return data
 
 def analyze_data(data):
     """Perform basic data analysis."""
@@ -34,12 +40,14 @@ def analyze_data(data):
         class_label_counts.plot(kind='bar')
         plt.title('Class Label Distribution')
         plt.xlabel('Class Label')
+        
         plt.ylabel('Count')
         plt.show()
 
 def main():
     file_path = input("Enter the path to the CSV file: ")
     data = load_data(file_path)
+    data = encode_label(data)
     analyze_data(data)
 
 if __name__ == "__main__":
